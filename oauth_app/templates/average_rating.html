@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Average Rating</title>
+</head>
+<body>
+    {% if average %}
+       <h2><center>Average Rating: <h3>{{ average|floatformat:1 }} of 5.0 stars</h3></center></h2>
+    {% else %}
+       <h2>This restaurant has not been rated yet.</h2>
+    {% endif %}
+
+<!--    <center><a href="{% url 'add_rating' place_id=place_id %}">Add Rating</a></center>-->
+<!--    <a href="{% url 'add_rating' place_id=place_id|default:'' %}">Add Rating</a> -->
+
+
+</body>
+</html>

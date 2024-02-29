@@ -1,0 +1,58 @@
+{% extends 'mapBase.html' %}
+{% load static %}
+{% block content %}
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEx85VV_xHlN6uJZrV3T-zVdHCbfwMnMg&callback=initMap">
+    </script>
+    <style>
+        #map {
+            height: 500px;
+            width: 50%;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function(){
+            //console.log("hello");
+            $.ajax({
+                url: "{% url 'restPageMap'%}",
+                method: 'GET',
+                success: function (data){
+                    initMap(data);
+                }
+            });
+        });
+
+        function initMap(data) {
+            console.log("Attempting to initialize data");
+            var location = {lat: {{ latitude }}, lng: {{longitude}} }; //These numbers should be flexible depending on current restaurant's longitude and latitude
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 23,
+                center: location,
+                mapTypeId: 'satellite',
+                styles: [
+                    {
+                        featureType: 'poi',
+                        stylers: [
+                            { visibility: 'off' }
+                        ]
+                    }
+                ]
+            });
+
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                title: '{{restaurant_name}}'
+            });
+        }
+    </script>
+
+<div class="linkholder">
+        <div class="mapholder">
+            <div id="map"></div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

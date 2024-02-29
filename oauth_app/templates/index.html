@@ -1,0 +1,159 @@
+{% load socialaccount %}
+
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="./index.css" />
+  <style>
+  body {
+    background-image: url('/static/image/landing.png');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+  }
+
+<!--  nav {-->
+<!--    color: white;-->
+<!--    display: flex;-->
+<!--    justify-content: space-between;-->
+<!--    align-items: center;-->
+<!--    padding: 10px;-->
+<!--  }-->
+
+<!--  .left-tab,-->
+<!--  .right-tabs {-->
+<!--    list-style: none;-->
+<!--    margin: 0;-->
+<!--    padding: 0;-->
+<!--  }-->
+
+<!--  .right-tabs li,-->
+<!--  .left-tab li {-->
+<!--    display: inline-block;-->
+<!--    margin-left: 15px;-->
+<!--  }-->
+
+<!--  nav a {-->
+<!--    text-decoration: none;-->
+<!--    color: white;-->
+<!--  }-->
+
+<!--  .button-container {-->
+<!--    text-align: center;-->
+<!--    margin-top: 20px;-->
+<!--  }-->
+
+<!--  .btn {-->
+<!--    margin: 5px;-->
+<!--  }-->
+
+<!--  .left-tab a,-->
+<!--  .right-tabs a {-->
+<!--    color: orange;-->
+<!--    font-size: 20px;-->
+<!--    font-weight: bold;-->
+<!--    font-family: "ITC Motter Corpus Semico", sans-serif;-->
+<!--  }-->
+
+<!--  nav a.highlighted {-->
+<!--    border: 2px solid orange;-->
+<!--    border-radius: 20px;-->
+<!--    padding: 5px 10px;-->
+<!--    background-color: orange;-->
+<!--    color: white;-->
+<!--  }-->
+<!--  .login-container {-->
+<!--    position: absolute;-->
+<!--    bottom: 10px;-->
+<!--    left: 10px;-->
+<!--    width: 100%;-->
+<!--    text-align: center;-->
+<!--  }-->
+   .login-button-container {
+      position: absolute;
+      top: 70%;
+      left: 20%;
+      transform: translate(-100%, -50%);
+    }
+    .login-button-container button {
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      border: 2px solid white;
+      background: darkorange;
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 20px;
+    }
+
+    .login-button-container button a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .login-button-container button i {
+      margin-right: 5px;
+    }
+</style>
+</head>
+
+<!--<body>-->
+<!--  <nav id="main-navigation">-->
+<!--    <ul class="left-tab">-->
+<!--      <li><a href="#" onclick="highlightTab(event)"></a></li>-->
+<!--    </ul>-->
+<!--    <ul class="right-tabs">-->
+<!--      <li><a href="{% provider_login_url 'google'%}" onclick="highlightTab(event)">Login</a></li>-->
+<!--    </ul>-->
+<!--  </nav>-->
+<body>
+  <div class="login-button-container">
+    <button class="btn btn-outline-info" onclick="handleLogin()">
+      <a href="{% provider_login_url 'google'%}">
+        <i class="fab fa-google"></i> Login
+      </a>
+    </button>
+  </div>
+
+
+
+<!--    <button class="btn btn-outline-primary">Login</button>-->
+<!--  </div>-->
+
+<!--  <body>-->
+<!--  <div class="new-button-container">-->
+<!--    <button class="btn btn-outline-primary">New Button</button>-->
+<!--  </div>-->
+  <!---
+  <button class="btn btn-outline-info">
+    <a href="{% provider_login_url 'google'%}">
+      <i class="fab fa-google"></i> Login
+    </a>
+  </button>
+  -->
+
+  <!---
+    <button class="btn btn-outline-info" name='setadmin' onclick="setasadmin()">
+      <a href="{% provider_login_url 'google'%}">
+        <i class="fab fa-google"></i> Login as Admin
+      </a>
+    </button>
+  -->
+</body>
+
+<script>
+  function highlightTab(event) {
+    const tabs = document.querySelectorAll('nav a');
+    tabs.forEach(tab => tab.classList.remove('highlighted'));
+    event.target.classList.add('highlighted');
+  }
+
+</script>
+
+</html>
+
+
+
+
+

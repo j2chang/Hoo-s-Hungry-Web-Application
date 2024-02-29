@@ -1,0 +1,92 @@
+{% load bootstrap5 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+<html lang="en">
+<style>
+        .navbar a {
+      position: relative;
+      font-size: 18px;
+      color: #FF4500;
+      font-weight: bold;
+      text-decoration: none;
+      margin-left: 40px;
+      margin-top: 100px;
+    }
+
+    .navbar a::before {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #FF4500;
+      transition: .3s;
+    }
+
+    .navbar a:hover::before {
+      width: 100%;
+    }
+</style>
+<head>
+    <!-- Add any additional head content here -->
+</head>
+
+<body>
+
+{% if user.is_authenticated %}
+<center>
+<!--<a href="/map/" class="continue-button">Back To Map</a>-->
+
+    {% if user_type == "u" %}
+    <a href="/map/" class="continue-button" style="color: #f46e1e; font-size: 18px;">Back To Map</a>
+    {% endif %}
+    {% if user_type == "a" %}
+    <nav class="navbar">
+      <a href="{% url 'adminview' %}">Admin Menu</a>
+      <a href="{% url 'editprofile' %}">Profile</a>
+      <a href="{% url 'approveReview' %}">Approve/Reject Pending Comments</a>
+      <a href="{% url 'restaurant_list' %}">All Restaurants List</a>
+      <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+    {% endif %}
+<h1><center>{{ restaurant_name }}</center></h1>
+    {% include 'average_rating.html' with place_id=place_id %}
+    {% if user_type == "u" %}
+    <!-- Add to Favorites Button -->
+<!--    <h3><center><a href="{% url 'add_rating' place_id=place_id %}">Add Rating</a></center></h3>-->
+
+<!--    <h3 style="text-align: center; color: #f46e1e;"><a href="{% url 'add_rating' place_id=place_id %}" style="color: #f46e1e; text-decoration: none;">Add Rating</a></h3>-->
+
+<!--    <h3 style="text-align: center; color: #f46e1e;"><a href="{% url 'add_rating' place_id=place_id %}" style="color: #f46e1e;">Add Rating</a></h3>-->
+
+    <h3 style="text-align: center; color: #f46e1e;"><a href="{% url 'add_rating' place_id=place_id %}" style="color: #f46e1e; text-decoration: underline;">Add Rating</a></h3>
+
+    {% endif %}
+
+    {% include 'restPageMap.html' %}
+    <p><i>Drag the orange human figure on to the map for a more up-close look!</i></p>
+    <h1><p><b>Address:</b> {{ restaurant_address }}, VA</p></h1>
+
+    {% if user_type == "u" %}
+    <form action="{% url 'add-to-favorites' restaurant_id %}" method="post">
+            {% csrf_token %}
+<!--            <button type="submit" class="btn btn-primary">Add to Favorites</button>-->
+        <button type="submit" class="btn btn-primary" style="background-color: #f46e1e; border-color: #f46e1e;">Add to Favorites</button>
+        </form>
+    {% include 'addReviews.html' %}
+    <br>
+    {% endif %}
+    <left>{% include 'seeReviews.html' with place_id=place_id %}</left>
+</center>
+    {% else %}
+    {% include 'loginVerification.html' %}
+    {% endif %}
+
+</body>
+
+</html>
+

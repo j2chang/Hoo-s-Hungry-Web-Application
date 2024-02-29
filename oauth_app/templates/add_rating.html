@@ -1,0 +1,141 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Add Rating</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>Add Rating for {{ restaurant_name }} </h1>-->
+<!--    <form method="post">-->
+<!--        {% csrf_token %}-->
+<!--        <label for="rating">Rating (1-5):</label>-->
+<!--        <input type="number" name="rating" id = "rating" min="1" max="5" required>-->
+<!--        <input type="hidden" name="place_id" value="{{ place_id }}">-->
+<!--        <button type="submit">Submit Rating</button>-->
+<!--    </form>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Rating</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="...">
+    <style>
+        body {
+            background: url('/static/image/welcome.png') no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .rating-box {
+            background-size: cover;
+            background-color: #fff;
+            border: 2px solid #f46e1e; /* Orange color */
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 48px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .rating-container {
+            margin-bottom: 30px;
+        }
+
+        .fa-star {
+            font-size: 36px;
+            color: #f46e1e; /* Orange color */
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .fa-star:hover {
+            color: #f46e1e; /* Darker orange on hover */
+        }
+
+        input[type="hidden"] {
+            display: none;
+        }
+
+        button {
+            background-color: #f46e1e; /* Orange color */
+            color: #fff;
+            font-size: 18px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #FF6347; /* Darker orange on hover */
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="rating-box">
+        <h1>Add Rating for {{ restaurant_name }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            <label for="rating">Rating (1-5):</label>
+            <div class="rating-container">
+                <input type="hidden" name="rating" id="rating" required>
+                <i class="far fa-star" data-value="1"></i>
+                <i class="far fa-star" data-value="2"></i>
+                <i class="far fa-star" data-value="3"></i>
+                <i class="far fa-star" data-value="4"></i>
+                <i class="far fa-star" data-value="5"></i>
+            </div>
+            <input type="hidden" name="place_id" value="{{ place_id }}">
+            <button type="submit">Submit Rating</button>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript to handle the rating stars
+        const ratingContainer = document.querySelector('.rating-container');
+        const ratingInput = document.querySelector('#rating');
+        const stars = ratingContainer.querySelectorAll('.fa-star');
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const value = star.getAttribute('data-value');
+                ratingInput.value = value;
+                stars.forEach(s => s.classList.toggle('fas', s.getAttribute('data-value') <= value));
+            });
+        });
+    </script>
+</body>
+</html>

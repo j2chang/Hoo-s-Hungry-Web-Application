@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<html lang="en">
+{% if usertype == 'a' %}
+<style>
+    .navbar a {
+      position: relative;
+      font-size: 18px;
+      color: #FF4500;
+      font-weight: bold;
+      text-decoration: none;
+      margin-left: 40px;
+      margin-top: 100px;
+    }
+
+    .navbar a::before {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #FF4500;
+      transition: .3s;
+    }
+
+    .navbar a:hover::before {
+      width: 100%;
+    }
+</style>
+<head>
+
+    <meta charset="UTF-8">
+    <title>List of Restaurants</title>
+</head>
+<body>
+    <nav class="navbar">
+      <a href="{% url 'adminview' %}">Admin Menu</a>
+      <a href="{% url 'editprofile' %}">Profile</a>
+      <a href="{% url 'approveReview' %}">Approve/Reject Pending Comments</a>
+      <a href="{% url 'restaurant_list' %}">All Restaurants List</a>
+      <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+    <h1><center>List of Restaurants</center></h1>
+    <h4><center>Click on link to view restaurant's page</center></h4>
+    <ul>
+        {% for restaurant in restaurants %}
+            <li><a href="{% url 'restaurantPage' place_id=restaurant.place_id %}">{{ restaurant.name }}</a> - {{restaurant.address}}, VA </li>
+        {% endfor %}
+    </ul>
+</body>
+{% else %}
+<section>
+{% include 'adminVerification.html' %}
+</section>
+{% endif %}
+</html>

@@ -1,0 +1,56 @@
+<html lang="en">
+    <style>
+    .user-info-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .user-info {
+        width: 48%;
+    }
+    </style>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+    </head>
+    <body>
+        {% block content %}
+            <h2 style="color: #f46e1e;" class="text-center text-decoration-underline mt-3">User Profile</h2>
+            <div>
+                <form action="{% url 'setupprofile' %}" method="post" class="form mx-auto" style="width:60%" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <div class="user-info-container">
+    <div class="user-info">
+        <p style="color: #f46e1e;"><b>A Common User Can: </b></p>
+        <li>Read and Write Reviews for Restaurants </li>
+        <li>Rate Restaurants on a 5-Star Scale </li>
+        <li>Access Restaurant Categories and Map </li>
+        <li>Save Restaurants in Favorites List </li>
+    </div>
+
+    <div class="user-info">
+        <p style="color: #f46e1e;"><b>An Admin User Can:</b></p>
+        <li>Approve and Reject Reviews for Restaurants </li>
+        <li>Delete Reviews Post-Acceptance </li>
+        <li>Access a List of All Restaurants in the Database </li>
+    </div>
+</div>
+                    <br>
+                    {% buttons %}
+                        <div class="mx-auto" style="width: 100px">
+                            <button  type="submit" class="btn btn-primary"  style="background-color: #f46e1e; color: #fff; border: 1px solid #fff;">
+                                Submit
+                            </button>
+                        </div>
+                    {% endbuttons %}
+                </form>
+            </div>
+        {% endblock content %}
+
+    </body>
+</html>

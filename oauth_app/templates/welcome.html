@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hoo's Hungry</title>
+  <style>
+    body {
+      font-family: 'Times New Roman', serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    p {
+      color: #666;
+    }
+
+    .continue-button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 10px 0;
+      text-decoration: none;
+      color: #fff;
+      background-color: #FF8C00;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .continue-button:hover {
+      background-color: #FF8C00;
+    }
+    /* Add more styles as needed */
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  {% if user.is_authenticated %}
+    <header>
+      <h1>Hoo's Hungry? We are!</h1>
+      <p>Welcome to Hoo's Hungry, {{ user.first_name }} {{ user.last_name }}!</p>
+    </header>
+
+    <section>
+      <p>Would you like to take a survey to help find a restaurant that fits your needs?</p>
+      <a href="/survey/" class="continue-button">Yes, please! Take me to the survey!</a>
+      <p></p>
+      <a href="/categories/" class="continue-button">No, thanks. I'd rather browse all categories.</a>
+      <p></p>
+      <a href="/logout/" class="continue-button">Logout</a>
+    </section>
+
+  {% else %}
+    <section>
+      {% include 'loginVerification.html' %}
+    </section>
+  {% endif %}
+
+</div>
+
+</body>
+</html>

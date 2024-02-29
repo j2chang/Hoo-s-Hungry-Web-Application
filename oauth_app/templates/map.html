@@ -1,0 +1,334 @@
+
+{% extends 'mapBase.html' %}
+{% load static %}
+{% block content %}
+
+<br>
+{% include 'navbar.html' %}
+<br>
+<br>
+<br>
+<br>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEx85VV_xHlN6uJZrV3T-zVdHCbfwMnMg&callback=initMap">
+    </script>
+    <style>
+        #map {
+            height: 700px;
+            width: 100%;
+        }
+
+    .continue-button {
+      display: block;
+      width: 100%;
+      padding: 15px 0;
+      font-size: 18px;
+      text-align: center;
+      text-decoration: none;
+      background-color: #FF8C00;
+      color: #fff;
+      border: 2px solid #FF8C00;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .continue-button:hover {
+      background-color: ##FF8C00;
+    }
+    </style>
+<script>
+
+var restaurants = [];
+$(document).ready(function(){
+    //console.log("hello");
+    $.ajax({
+        url: "{% url 'map'%}",
+        method: 'GET',
+        success: function (data){
+            initMap(data);
+        }
+    });
+    var selectedCuisineType = localStorage.getItem('selectedCuisineType');
+    if (selectedCuisineType) {
+        // Do something with selectedCuisineType
+        console.log("Selected Cuisine Type:", selectedCuisineType);
+        // Clear the value from localStorage if needed
+        //localStorage.removeItem('selectedCuisineType');
+        $.ajax({
+        url: '/filter-restaurants/',
+        type: 'GET',
+        data: {
+            cuisine_type: selectedCuisineType,
+        },
+        success: function(response) {
+            console.log("cuisine type: " + selectedCuisineType);
+            console.log(response); // Response in browser's console
+            initMap(response)
+        },
+        error: function(xhr, status, error) {
+            console.error("Error in AJAX request: ", error);
+        }
+    });
+    localStorage.removeItem('selectedCuisineType');
+    }
+
+});
+
+function initMap(data) {
+    //console.log("Attempting to initialize data");
+    var location = {lat: 38.0336, lng: -78.5080};
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: location,
+        styles: [
+            {
+                featureType: 'poi',
+                stylers: [
+                    { visibility: 'off' }
+                ]
+            }
+        ]
+    });
+
+    var mapMarkers = [];
+    var infoWindows = [];
+
+    // Check if data is an array
+    //console.log("Map Initialized");
+    //console.log("DATA IS: " + JSON.stringify(data.results));
+    if (data && data.results && Array.isArray(data.results)) {
+        console.log("Marker Start");
+        data.results.forEach((restaurant) => {
+    console.log("Restaurant:", restaurant);
+    console.log("Restaurant Place_ID:", restaurant.place_id);
+            const existingRestaurant = findExistingRestaurant(restaurant.place_id);
+            if (existingRestaurant) {
+                handleRestaurant(existingRestaurant);
+            } else {
+                addNewRestaurantToModel(restaurant, (newRestaurant) => {
+                    handleRestaurant(newRestaurant);
+                }, (error) => {
+                    console.error("Error adding restaurant: ", error);
+                });
+            }
+
+            const marker = new google.maps.Marker({
+                position: {
+                    lat: restaurant.geometry.location.lat,
+                    lng: restaurant.geometry.location.lng,
+                },
+                map: map,
+                title: restaurant.name,
+            });
+
+            const infoWindow = new google.maps.InfoWindow({
+                content: '<div><strong><center>' + restaurant.name + '</center></strong>' +
+                'Address: ' + restaurant.vicinity + ', VA <br>' +
+                    '<center><a href="/restaurantPage/' + restaurant.place_id + '">View Restaurant Page</a></center></div>'
+            });
+
+            marker.addListener('click', function () {
+                // Close any open info windows
+                infoWindows.forEach(infoWin => {
+                    infoWin.close();
+                });
+
+                // Open the clicked marker's info window
+                infoWindow.open(map, marker);
+            });
+
+            mapMarkers.push(marker);
+            infoWindows.push(infoWindow);
+
+            console.log("Marker End");
+        });
+    }
+}
+
+//SOURCES:
+//Parts of the following functions were produced with the help of generative AI, ChatGPT:
+
+function findExistingRestaurant(placeId) {
+   console.log("Searching for restaurant with id:", placeId);
+       $.ajax({
+        url: '/checkRestaurant/',
+        method: 'GET',
+        async: false,
+        data: {
+            place_id: placeId,
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function (response) {
+            if (response.exists) {
+                console.log("Existing restaurant found:", response.restaurant);
+                // Handle the existing restaurant as needed
+                handleRestaurant(response.restaurant);
+            } else {
+                console.log("Restaurant not found");
+                // Handle the case when the restaurant is not in the database
+                // You can add it to the database or perform other actions
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error in AJAX request: ", error);
+        }
+    });
+}
+
+function addNewRestaurantToModel(restaurant, successCallback, errorCallback) {
+    // Check if the restaurant already exists in the array
+       $.ajax({
+        url: '/checkRestaurant/',
+        method: 'GET',
+        data: {
+            place_id: restaurant.place_id,
+        },
+        success: function (response) {
+            if (response.exists) {
+                // Restaurant already exists, call the successCallback with the existing restaurant
+                successCallback(response.restaurant);
+            } else {
+                // If it doesn't exist, make an AJAX call to add the new restaurant
+                $.ajax({
+                    url: '/addRestaurant/',
+                    method: 'POST',
+                    data: {
+                        name: restaurant.name,
+                        place_id: restaurant.place_id,
+                        address: restaurant.vicinity,
+                        latitude: restaurant.geometry.location.lat,
+                        longitude: restaurant.geometry.location.lng,
+                        // Include other relevant data
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        // Log the response to the console
+                        console.log("addNewRestaurantToModel response:", response);
+                        console.log("Name is: " + response.name);
+                        console.log("Place ID is: " + response.place_id);
+
+                        // Add the new restaurant to the global "restaurants" array
+                        restaurants.push(response);
+
+                        // Call the successCallback with the new restaurant
+                        successCallback(response);
+                    },
+                    error: function (xhr, status, error) {
+                        errorCallback(error);
+                    }
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            errorCallback(error);
+        }
+    });
+}
+
+
+function handleRestaurant(restaurant) {
+    // Implement logic to handle the existing or newly added restaurant
+    // This could include opening an info window, navigating to the restaurant page, etc.
+    // Use the "restaurant" object as needed
+
+}
+
+    function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Check if this cookie string begins with the name we want
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+    }
+
+
+  </script>
+
+<div class="pageholder">
+    <div class="titleholder">
+        <div class="title"><i class="fas fa-compass mr-2"></i> <center> Nearby Restaurants: </center> </div>
+<!--        <a href="{% url 'map'%}" class="title2 mr-4"><i class="fas fa-compass mr-2"></i> Back to map </a>-->
+    </div>
+
+<div class="filter-form">
+    <center>
+    <form id="restaurant-filter-form">
+        {% csrf_token %}
+        <!-- <input type="text" name="zip_code" placeholder="Zip Code">
+        <select name="star_rating">
+            <option value="">Select Rating</option>
+            <option value="1">1 Star</option>
+            <option value="2">2 Stars</option>
+
+        </select> -->
+        <input type="text" id="cuisine_type" placeholder="Cuisine Type">
+        <!-- <input type="text" name="price_range" placeholder="Price Range"> -->
+<!--        <button type="submit">Apply Filter</button>-->
+        <button type="submit" style="background-color: #f46e1e; color: #fff; border: none; padding: 5px 10px; border-radius: 5px;">Apply Filter</button>
+    </form>
+    </center>
+</div>
+
+    <script>
+    $('#restaurant-filter-form').submit(function(e) {
+        console.log('Form submission triggered');
+        e.preventDefault();
+
+        // Get form values
+        var zipCode = $('#zip_code').val();
+        var starRating = $('#star_rating').val();
+        var cuisineType = $('#cuisine_type').val();
+        var priceRange = $('#price_range').val();
+
+        console.log('Cuisine Type:', cuisineType);
+
+        // AJAX call to your backend with the filter parameters
+        $.ajax({
+            url: '/filter-restaurants/', // Ensure this URL is correct
+            type: 'GET',
+            data: {
+                zip_code: zipCode,
+                star_rating: starRating,
+                cuisine_type: cuisineType,
+                price_range: priceRange
+            },
+            success: function(response) {
+                console.log(response); // Response in browser's console
+
+                // Handle the response from Google Places API
+                if (response.results && response.results.length > 0) {
+                    // Assuming you have a function to process and display these results
+                    initMap(response);
+                } else {
+                    console.log("No restaurants found");
+                    // Handle the scenario when no restaurants are found
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error in AJAX request: ", error);
+            }
+        });
+    });
+
+
+</script>
+
+    <div class="linkholder">
+        <div class="mapholder">
+            <div id="map"></div>
+        </div>
+    </div>
+</div>
+<!--         <a href="/categories/" class="continue-button"><center>Return to All Categories </center>  </a>-->
+
+
+{% endblock content %}
+

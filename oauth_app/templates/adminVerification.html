@@ -1,0 +1,48 @@
+{% load socialaccount %}
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+  <link rel="stylesheet" type="text/css" href="./index.css" />
+  <style>
+  body {
+      background-image: url('/static/image/welcome.png');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      font-family: 'Times New Roman', serif;
+      color: #fff;
+
+    h1 {
+      color: #333;
+    }
+
+    p {
+      color: #666;
+    }
+    .continue-button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 10px 0;
+      text-decoration: none;
+      color: #fff;
+      background-color: #FF8C00;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .continue-button:hover {
+      background-color: #FF8C00;
+    }
+  }
+  </style>
+{% block content %}
+<h1><center><b>Oops! You can't access admin pages with your current account! </b></center></h1>
+<h1><center><b>Click the button below to return to the main page:</b></center></h1>
+  <center>
+    <a href="/user/" class="continue-button">Return to User Page</a>
+  </div></center>
+{% endblock %}

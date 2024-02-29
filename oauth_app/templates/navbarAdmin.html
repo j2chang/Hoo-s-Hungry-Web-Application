@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hoo's Hungry NavBar</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "HK Grotesk", sans-serif;
+    }
+
+<!--    body {-->
+<!--      min-height: 100vh;-->
+<!--      background: url('/static/image/navBar.png') no-repeat;-->
+<!--      background-size: cover;-->
+<!--      background-position: center;-->
+<!--      padding-top: 120px;-->
+<!--    }-->
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px 100px;
+      background: none;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .navbar a {
+      position: relative;
+      font-size: 18px;
+      color: #FF4500;
+      font-weight: bold;
+      text-decoration: none;
+      margin-left: 40px;
+      margin-top: 100px;
+    }
+
+    .navbar a::before {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #FF4500;
+      transition: .3s;
+    }
+
+    .navbar a:hover::before {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <a href="{% url 'adminview' %}">Admin Menu</a>
+      <a href="{% url 'editprofile' %}">Profile</a>
+      <a href="{% url 'approveReview' %}">Approve/Reject Pending Comments</a>
+      <a href="{% url 'restaurant_list' %}">All Restaurants List</a>
+      <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+  </header>
+</body>
+
+</html>

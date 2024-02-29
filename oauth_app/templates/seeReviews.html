@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reviews</title>
+</head>
+{% load static %}
+
+<style>
+    .comment-container {
+        border: 3px solid orange;
+        padding: 10px;
+        margin-bottom: 15px;
+        text-align: left;
+    }
+    .red-button {
+        background-color: red;
+        color: white;
+    }
+    .ok-button {
+            font-size: 20px;
+    }
+    .button-container {
+        text-align: right;
+    }
+
+</style>
+
+<body>
+    <h2>Reviews</h2>
+    <!--<p>Debug: {{ place_id }}</p> -->
+
+    {% if Reviews %}
+        {% for review in Reviews %}
+        <!--   <p>Reviews Debug: {{ review.place_id.place_id }}</p>
+        <p>Debug: {{ review.user }}</p> Appears
+        <p>Debug: {{ review.user.first_name }}</p> Doesn't appear-->
+           {% if review.place_id.place_id == place_id %}
+              {% if review.is_approved %}
+                <h4><div class="comment-container">
+                <p>
+                <b>From {{review.user.first_name}} {{review.user.last_name}} at {{review.pub_date}}:</b>
+                </p>
+                    {{ review.review_text }}
+                </div></h4>
+              <div class="button-container">
+              <form method="post" action="{% url 'acknowledgeRejection' review.id place_id %}">
+                        {% csrf_token %}
+                        {% if user_type == "a" %}
+                  <button type="submit" class="red-button"><b>Delete Review from Database (Warning: Irreversible Action!)</b> </button>
+                        {% endif %}
+              </form>
+              </div>
+              {% elif not review.is_approved and review.user == user %}
+                    {% if review.is_reviewed and not review.is_rejection_acknowledged %}
+                        <br>
+    <h2> <p><b><i><FONT COLOR="#ff0000"> {{ review.status }} </FONT></i></b></p></h2>
+                        <form method="post" action="{% url 'acknowledgeRejection' review.id place_id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="ok-button">Ok</button>
+                        </form>
+                        <br>
+              {% elif review.is_rejection_acknowledged %}
+                 <!-- Do nothing. Safeguards if review.delete() fails for whatever reason -->
+                 {% else %}
+                    <br>
+    <i><h2>{{ review.status }}</h2></i>
+                    <br>
+              {% endif %}
+           {% endif %}
+            <br>
+        {% endif %}
+        {% endfor %}
+    {% else %}
+    <p>There are no reviews for this restaurant.</p>
+    {% endif %}
+</body>
+</html>

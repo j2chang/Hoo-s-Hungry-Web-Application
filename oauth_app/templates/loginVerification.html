@@ -1,0 +1,54 @@
+{% load socialaccount %}
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+  <link rel="stylesheet" type="text/css" href="./index.css" />
+  <style>
+  body {
+      background-image: url('/static/image/welcome.png');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      font-family: 'Times New Roman', serif;
+      color: #fff;
+
+    h1 {
+      color: #333;
+    }
+
+    p {
+      color: #666;
+    }
+    .continue-button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 10px 0;
+      text-decoration: none;
+      color: #fff;
+      background-color: #FF8C00;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .continue-button:hover {
+      background-color: #FF8C00;
+    }
+  }
+  </style>
+
+<h1><center><b>Oops! You can't access Hoo's Hungry until you're signed in! </b></center></h1>
+  <h1><center><b>Click the button below to access the login page:</b></center></h1>
+{% block content %}
+  <center> <div class="login-button-container">
+    <button class="btn btn-outline-info" onclick="handleLogin()">
+      <a href="{% provider_login_url 'google'%}">
+        <i class="fab fa-google"></i> Login
+      </a>
+    </button>
+  </div></center>
+{% endblock %}
+

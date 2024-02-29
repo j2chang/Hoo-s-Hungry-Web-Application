@@ -1,0 +1,90 @@
+{% load bootstrap5 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% bootstrap_messages %}
+
+<html lang="en">
+<head>
+    <title>My Favorite Restaurants</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #f46e1e;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .list-group-item {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .btn-danger {
+            background-color: #f46e1e;
+            border-color: #f46e1e;
+        }
+
+        p {
+            color: #495057;
+        }
+
+        .no-favorites {
+            color: #f46e1e;
+            text-align: center;
+        }
+
+        .back-button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <br>
+        <h1>My Favorite Restaurants</h1>
+
+        {% if user.is_authenticated %}
+            {% if favorites %}
+                <ul class="list-group">
+                    {% for favorite in favorites %}
+                        <li class="list-group-item">
+                            <h3>{{ favorite.restaurant.name }}</h3>
+                            <p>Address: {{ favorite.restaurant.address }}</p>
+
+                            <!-- Remove from Favorites Button -->
+                            <form action="{% url 'remove-from-favorites' favorite.restaurant.id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Remove from Favorites</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="no-favorites">You have no favorite restaurants yet.</p>
+            {% endif %}
+        {% else %}
+            {% include 'loginVerification.html' %}
+        {% endif %}
+
+        <!-- Back Button -->
+<!--        <a href="javascript:history.back()" class="btn btn-primary back-button">Back</a>-->
+        <a href="javascript:history.back()" class="btn btn-primary back-button" style="background-color: #f46e1e; border-color: #f46e1e; color: #fff;">
+    Back
+    </a>
+    </div>
+
+</body>
+</html>

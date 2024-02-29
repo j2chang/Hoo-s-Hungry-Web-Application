@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: 'Times New Roman', serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+
+    input[type="submit"] {
+      background-color:  #f46e1e;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #FFA500;
+    }
+  </style>
+</head>
+
+<body>
+<h3>Add a Review: </h3>
+<form action= "{% url 'newreview' place_id=place_id %}" method="POST" class = "form">
+  {% csrf_token %}
+  <textarea rows="8" cols="80" name="Review"spellcheck="true" required></textarea>
+  <br>
+  <input type="hidden" name="place_id" value="{{ place_id }}">
+  <input type="submit" value="Submit Review">
+    </form>
+</body>
+</html>

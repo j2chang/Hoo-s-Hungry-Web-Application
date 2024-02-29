@@ -1,0 +1,65 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+    </head>
+      <style>
+        body {
+            padding: 20px;
+        }
+
+        .custom-dark-orange-btn {
+            color: #ffffff;
+            background-color: #FF8C00;
+            border-color: #FF8C00;
+        }
+
+        .custom-dark-orange-btn:hover,
+        .custom-dark-orange-btn:active{
+            background-color: #f46e1e;
+            border-color: #f46e1e;
+        }
+        .form-container {
+            width: 60%;
+            margin: 0 auto;
+        }
+
+        .submit-button {
+            width: 100px;
+            margin: 0 auto;
+            background-color: #f46e1e;
+            border-color: #f46e1e;
+
+        }
+        .form-check-input:checked {
+            background-color: #f46e1e;
+            border-color: #f46e1e;
+        }
+    </style>
+
+<body>
+  {% if user.is_authenticated %}
+    {% block content %}
+<!--      <h2 class="text-center text-decoration-underline mt-3">Please Select Which Cuisines Interest You</h2>-->
+      <h2 class="text-center mt-3" style="color: #f46e1e; text-decoration: underline;">Please Select Which Cuisines Interest You</h2>
+      <div>
+          <form action="{% url 'surveymap' %}" method="post" class="form mx-auto" style="width:60%" enctype="multipart/form-data">
+              {% csrf_token %}
+              {% bootstrap_form form %}
+              {% buttons %}
+                  <div class="mx-auto" style="width: 100px">
+                      <button type="submit" class="btn custom-dark-orange-btn">
+                          Submit
+                      </button>
+                  </div>
+              {% endbuttons %}
+          </form>
+      </div>
+    {% endblock content %}
+  {% endif %}
+</body>
+</html>

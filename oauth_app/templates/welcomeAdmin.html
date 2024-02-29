@@ -1,0 +1,104 @@
+
+<html>
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<body>
+  <link rel="stylesheet" type="text/css" href="index.css">
+<style>
+
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    p {
+      color: #666;
+    }
+
+    .continue-button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 10px 0;
+      text-decoration: none;
+      color: #fff;
+      background-color: #FF8C00;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .continue-button:hover {
+      background-color: #FF8C00;
+    }
+
+        .navbar a {
+      position: relative;
+      font-size: 18px;
+      color: #FF4500;
+      font-weight: bold;
+      text-decoration: none;
+      margin-left: 40px;
+      margin-top: 100px;
+    }
+
+    .navbar a::before {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #FF4500;
+      transition: .3s;
+    }
+
+    .navbar a:hover::before {
+      width: 100%;
+    }
+  </style>
+</body>
+
+<body>
+{% if user.is_authenticated %}
+  {% if usertype == 'a' %}
+<center>
+          <nav class="navbar">
+      <a href="{% url 'adminview' %}">Admin Menu</a>
+      <a href="{% url 'editprofile' %}">Profile</a>
+      <a href="{% url 'approveReview' %}">Approve/Reject Pending Comments</a>
+      <a href="{% url 'restaurant_list' %}">All Restaurants List</a>
+      <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+  <br>
+  <br>
+  <br>
+  <br>
+  <h1><p style="color: #f46e1e;">Hoo's Hungry Admin Menu</p></h1>
+     <br>
+    <p style="color: black; font-size: 25px;">Welcome to Hoo's Hungry, Admin {{ user.first_name }} {{ user.last_name }}!</p>
+    <p style="color: black; font-size: 20px;"> Click on one of the options on the navigation bar above to access your admin features. </p>
+  </center>
+  {% else %}
+    <section>
+    {% include 'adminVerification.html' %}
+    </section>
+  {% endif %}
+{% else %}
+ <section>
+ {% include 'loginVerification.html' %}
+ </section>
+{% endif %}
+</body>
+</html>

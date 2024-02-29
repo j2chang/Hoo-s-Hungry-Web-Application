@@ -1,0 +1,61 @@
+{% extends 'mapBase.html' %}
+{% block content %}
+{% load static %}
+
+<script>
+
+
+    $(document).ready(function(){
+        console.log("hello");
+        $.ajax({
+
+            url: "{% url 'map'%}",
+            method: 'GET',
+            success: function (data){
+                console.log(data);
+                initMap(data);
+            }
+      });
+    });
+
+    function initMap(data) {
+       const map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 15,
+          center: { lat: 38.0336, lng: -78.5080 }
+       });
+
+       // Check if data is an array
+       if (Array.isArray(data)) {
+           data.forEach((i) => {
+                const marker = new google.maps.Marker({
+                    position: { lat: parseFloat(i.latitude), lng: parseFloat(i.longitude) },
+                    map: map,
+                });
+           });
+       }
+    }
+
+  </script>
+
+
+<div class="pageholder">
+    <div class="titleholder">
+        <div class="title"><i class="fas fa-compass mr-2"></i> <center> Nearby Restaurants: </center> </div>
+<!--        <a href="{% url 'map'%}" class="title2 mr-4"><i class="fas fa-compass mr-2"></i> Back to map </a>-->
+    </div>
+
+    <div class="linkholder">
+        <div class="mapholder">
+            <div id="map"></div>
+            <script
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEx85VV_xHlN6uJZrV3T-zVdHCbfwMnMg&callback=initMap&v=weekly"
+            defer
+            ></script>
+        </div>
+    </div>
+</div>
+         <a href="/categories/" class="continue-button"><center>Return to all Categories </center>  </a>
+
+
+{% endblock content %}
+

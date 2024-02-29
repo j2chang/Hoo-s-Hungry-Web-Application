@@ -1,0 +1,79 @@
+{% load socialaccount %}
+<html>
+<body>
+  <link rel="stylesheet" type="text/css" href="index.css">
+</body>
+  <style>
+    body {
+      background-image: url('/static/image/welcome.png');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      font-family: 'Times New Roman', serif;
+      color: #fff;
+    }
+
+    .container {
+      background-color: #fff;
+      max-width: 400px;
+      margin: 250px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #000;
+      font-family: 'Times New Roman', serif;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    p {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 0px;
+    }
+
+    .continue-button {
+      display: block;
+      width: 100%;
+      padding: 15px 0;
+      font-size: 18px;
+      text-align: center;
+      text-decoration: none;
+      background-color: #FF8C00;
+      color: #fff;
+      border: 2px solid #FF8C00;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .continue-button:hover {
+      background-color: ##FF8C00;
+    }
+  </style>
+<body>
+
+
+
+{% if user.is_authenticated %}
+<h1>Restaurant Finder App Admin </h1>
+  <p>Welcome {{ user.first_name }} {{ user.last_name }}, you are logged in as an admin. </p>
+ <a href="/welcomeAdmin/" class="continue-button">Proceed to the Website</a>
+<p></p>
+ <a href="/logout/" class="continue-button">Logout</a>
+ {% else %}
+ <section>
+ {% include 'loginVerification.html' %}
+ </section>
+ {% endif %}
+</body>
+</html>
