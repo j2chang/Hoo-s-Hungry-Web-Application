@@ -1,8 +1,6 @@
-# Project A-11
+# Project
 
 __Names:__ Yul Goodman (dmg2hh), Jessica Oraegbu (mfg9rv), Hayley Davis (pcs7gm), Kevin Zhao (twq8db), Aaron Ko (wwr7nu)
-
-To Sherriff: Please note that we have purposedly left it so that your user may write multiple comments and add multiple ratings per restaurant, so that you get fuller  functionality (see how ratings average out, can submit multiple comments to test out approval/rejection feature on a single restaurant, etc.). 
 
 /***************************************************************************************
 *  REFERENCES
